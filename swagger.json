@@ -1,0 +1,242 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "ProductMS APIs",
+      "version": "1.0.0",
+      "description": "API documentation for Your App"
+    },
+    "tags": [
+      {
+        "name": "authentication-controller",
+        "description": "Operations related to authentication"
+      },
+      {
+        "name": "Products",
+        "description": "Operations related to product management"
+      }
+    ],
+    "servers": [
+      {
+        "url": "http://localhost:3100"
+      }
+    ],
+    "paths": {
+      "/auth/signup": {
+        "post": {
+          "summary": "Save user",
+          "tags": ["authentication-controller"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "User saved successfully",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/auth/signin": {
+        "post": {
+          "summary": "Signin",
+          "tags": ["authentication-controller"],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "required": true
+                    },
+                    "password": {
+                      "type": "object",
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "required": true
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "User signin successful",
+              "content": {
+                "application/json": {}
+              }
+            }
+          }
+        }
+      },
+      "/product": {
+        "post": {
+          "tags": ["Products"],
+          "summary": "Create a new product",
+          "description": "Create a new product with the provided details",
+          "consumes": ["application/json"],
+          "produces": ["application/json"],
+          "parameters": [],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Employee"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Employee created successfully"
+            },
+            "400": {
+              "description": "Invalid request data"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "get": {
+          "tags": ["Products"],
+          "summary": "Get paginated products",
+          "description": "Retrieve products in a paginated manner",
+          "parameters": [
+            {
+              "name": "page",
+              "in": "query",
+              "description": "Page number",
+              "required": false,
+              "schema": {
+                "type": "integer"
+              }
+            },
+            {
+              "name": "pageSize",
+              "in": "query",
+              "description": "Number of products per page",
+              "required": false,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "products": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Employee"
+                    }
+                  }
+                }
+              }
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      },
+      "/product/{id}" : {
+        "tags": ["Products"],
+        "summary": "Get a single product by ID",
+        "description": "Retrieve a product by its ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
+    "components": {
+      "schemas": {
+        "User": {
+          "type": "object",
+          "properties": {
+            "phoneNumber": {
+              "type": "string",
+              "required": true
+            },
+            "fullName": {
+              "type": "string",
+              "required": true
+            },
+            "email": {
+              "type": "string",
+              "required": true
+            },
+            "password": {
+              "type": "string",
+              "required": true
+            },
+            "role": {
+              "type": "string",
+              "required": true,
+              "enum": ["RESTAURANT_MANAGER", "CLIENT"]
+            }
+          }
+        },
+        "Product": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "Description": {
+              "type": "string"
+            },
+            "Price": {
+              "type": "string",
+              "maxLength": 16
+            }
+          },
+          "required": [
+            "name",
+            "description",
+            "price"
+          ]
+        }
+      },
+      "securitySchemes": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }, 
+    "security" : [
+      {
+        "bearerAuth" : []
+      }
+    ]
+  }
+  
